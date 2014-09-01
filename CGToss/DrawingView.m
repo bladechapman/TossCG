@@ -250,7 +250,7 @@ static const CGFloat lineWidth = 1.0;
 
         LineSegment perp1 = [self lineSegmentPerpendicularTo:(LineSegment){[[smoothedPoints objectAtIndex:i-1] CGPointValue],
                                                                             [[smoothedPoints objectAtIndex:i] CGPointValue]}
-                                                                                ofRelativeLength:5.f];
+                                                                                ofRelativeLength:2.f];
 
         if ((_lastLineSegment.firstPoint.x == -1 && _lastLineSegment.firstPoint.y == -1) ||
             (_lastLineSegment.firstPoint.x == 0 && _lastLineSegment.firstPoint.y == 0)) {
@@ -259,17 +259,21 @@ static const CGFloat lineWidth = 1.0;
             CGContextStrokePath(_cacheContext);
         }
         else {
-            CGContextMoveToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
-            CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
-            CGContextStrokePath(_cacheContext);
+//            CGContextMoveToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
+//            CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
+//            CGContextStrokePath(_cacheContext);
 
             CGContextMoveToPoint(_cacheContext, _lastLineSegment.firstPoint.x, _lastLineSegment.firstPoint.y);
             CGContextAddLineToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
-            CGContextStrokePath(_cacheContext);
+//            CGContextStrokePath(_cacheContext);
 
-            CGContextMoveToPoint(_cacheContext, _lastLineSegment.secondPoint.x, _lastLineSegment.secondPoint.y);
+            CGContextAddLineToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
             CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
-            CGContextStrokePath(_cacheContext);
+
+            CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
+            CGContextAddLineToPoint(_cacheContext, _lastLineSegment.secondPoint.x, _lastLineSegment.secondPoint.y);
+            CGContextClosePath(_cacheContext);
+            CGContextDrawPath(_cacheContext, kCGPathFillStroke);
         }
         
         _lastLineSegment = perp1;

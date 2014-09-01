@@ -26,6 +26,7 @@ typedef struct {
     CGContextRef _cacheContext;
 
     NSMutableArray *_points;
+    LineSegment _lastLineSegment;
 
     UIDeviceOrientation _previousOrientation;
     BOOL _orientationChange;
@@ -163,6 +164,7 @@ static const CGFloat lineWidth = 1.0;
     UITouch *touch = [touches anyObject];
     CGPoint pt = [touch locationInView:self];
 
+    _lastLineSegment = (LineSegment){CGPointMake(-1, -1), CGPointMake(-1, -1)};
     _points = [NSMutableArray array];
     [_points addObject:[NSValue valueWithCGPoint:pt]];
 }
@@ -201,15 +203,10 @@ static const CGFloat lineWidth = 1.0;
             CGPoint cur = [[_points objectAtIndex:i] CGPointValue];
             CGPoint midPoint1 = CGPointMake((prev1.x + prev2.x)/2, (prev1.y + prev2.y)/2);
             CGPoint midPoint2 = CGPointMake((cur.x + prev1.x)/2, (cur.y + prev1.y)/2);
-//            LineSegment coreSegmentForward = (LineSegment){prev2, cur};
-//            LineSegment coreSegmentBackward = (LineSegment){cur, prev2};
-//            float coreDistance = len_sq(prev2, cur);
-
- 
 
             int segmentDistance = 2;
             float distance = hypotf(midPoint1.x - midPoint2.x, midPoint1.y - midPoint2.y);
-            int numberOfSegments = MIN(128, MAX(floorf(distance / segmentDistance), 32));
+            int numberOfSegments = MIN(32, MAX(floorf(distance / segmentDistance), 32));
 
             float t = 0.0f;
             float step = 1.0f/numberOfSegments;
@@ -247,40 +244,36 @@ static const CGFloat lineWidth = 1.0;
     CGContextSetLineWidth(_cacheContext, lineWidth);
 
     NSMutableArray *smoothedPoints = [self calculateSmoothLinePoints];
-//    CGContextMoveToPoint(_cacheContext, [[smoothedPoints objectAtIndex:0] CGPointValue].x, [[smoothedPoints objectAtIndex:0] CGPointValue].y);
+
 
     for (int i = 1; i < [smoothedPoints count]; i++) {
 
-//        CGContextAddLineToPoint(_cacheContext,
-//                                [[smoothedPoints objectAtIndex:i] CGPointValue].x,
-//                                [[smoothedPoints objectAtIndex:i] CGPointValue].y);
+        LineSegment perp1 = [self lineSegmentPerpendicularTo:(LineSegment){[[smoothedPoints objectAtIndex:i-1] CGPointValue],
+                                                                            [[smoothedPoints objectAtIndex:i] CGPointValue]}
+                                                                                ofRelativeLength:5.f];
 
-        LineSegment coreSegForward = (LineSegment){[[smoothedPoints objectAtIndex:i-1] CGPointValue], [[smoothedPoints objectAtIndex:i] CGPointValue]};
-        LineSegment coreSegBackWard = (LineSegment){[[smoothedPoints objectAtIndex:i] CGPointValue], [[smoothedPoints objectAtIndex:i] CGPointValue]};
-        LineSegment perp1 = [self lineSegmentPerpendicularTo:coreSegForward ofRelativeLength:10.f];
-        LineSegment perp2 = [self lineSegmentPerpendicularTo:coreSegBackWard ofRelativeLength:10.f];
-        CGContextMoveToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
-        CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
-        CGContextStrokePath(_cacheContext);
+        if ((_lastLineSegment.firstPoint.x == -1 && _lastLineSegment.firstPoint.y == -1) ||
+            (_lastLineSegment.firstPoint.x == 0 && _lastLineSegment.firstPoint.y == 0)) {
+            CGContextMoveToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
+            CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
+            CGContextStrokePath(_cacheContext);
+        }
+        else {
+            CGContextMoveToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
+            CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
+            CGContextStrokePath(_cacheContext);
 
-//        CGContextMoveToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
-//        CGContextAddLineToPoint(_cacheContext, perp2.firstPoint.x, perp2.firstPoint.y);
-//        CGContextStrokePath(_cacheContext);
+            CGContextMoveToPoint(_cacheContext, _lastLineSegment.firstPoint.x, _lastLineSegment.firstPoint.y);
+            CGContextAddLineToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
+            CGContextStrokePath(_cacheContext);
 
-//        CGContextAddLineToPoint(_cacheContext, perp2.secondPoint.x, perp2.secondPoint.y);
-//        CGContextAddLineToPoint(_cacheContext, perp2.firstPoint.x, perp2.firstPoint.y);
-//        CGContextStrokePath(_cacheContext);
-//
-//        CGContextMoveToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
-//        CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.firstPoint.y);
-//        CGContextAddLineToPoint(_cacheContext, perp2.secondPoint.x, perp2.secondPoint.y);
-//        CGContextAddLineToPoint(_cacheContext, perp2.firstPoint.x, perp2.firstPoint.y);
-//        CGContextClosePath(_cacheContext);
-//        CGContextFillPath(_cacheContext);
-
+            CGContextMoveToPoint(_cacheContext, _lastLineSegment.secondPoint.x, _lastLineSegment.secondPoint.y);
+            CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
+            CGContextStrokePath(_cacheContext);
+        }
+        
+        _lastLineSegment = perp1;
     }
-
-//    CGContextStrokePath(_cacheContext);
 
 
     [self setNeedsDisplayInRect:CGRectMake([[smoothedPoints lastObject] CGPointValue].x - self.frame.size.width/4,

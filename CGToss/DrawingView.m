@@ -201,34 +201,11 @@ static const CGFloat lineWidth = 1.0;
             CGPoint cur = [[_points objectAtIndex:i] CGPointValue];
             CGPoint midPoint1 = CGPointMake((prev1.x + prev2.x)/2, (prev1.y + prev2.y)/2);
             CGPoint midPoint2 = CGPointMake((cur.x + prev1.x)/2, (cur.y + prev1.y)/2);
-            LineSegment coreSegmentForward = (LineSegment){prev2, cur};
-            LineSegment coreSegmentBackward = (LineSegment){cur, prev2};
+//            LineSegment coreSegmentForward = (LineSegment){prev2, cur};
+//            LineSegment coreSegmentBackward = (LineSegment){cur, prev2};
 //            float coreDistance = len_sq(prev2, cur);
 
-        /*experimental line stuff*/
-//            LineSegment perp1 = [self lineSegmentPerpendicularTo:coreSegmentForward ofRelativeLength:.1f];
-//            CGContextMoveToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
-//            CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
-//            CGContextSetStrokeColorWithColor(_cacheContext, [[UIColor greenColor] CGColor]);
-//            CGContextStrokePath(_cacheContext);
-
-//            LineSegment perp2 = [self lineSegmentPerpendicularTo:coreSegmentBackward ofRelativeLength:0.1f];
-//            CGContextMoveToPoint(_cacheContext, perp2.firstPoint.x, perp2.firstPoint.y);
-//            CGContextAddLineToPoint(_cacheContext, perp2.secondPoint.x, perp2.secondPoint.y);
-//            CGContextSetStrokeColorWithColor(_cacheContext, [[UIColor redColor] CGColor]);
-//            CGContextStrokePath(_cacheContext);
-
-//            CGContextSetStrokeColorWithColor(_cacheContext, [[UIColor blackColor] CGColor]);
-//            CGContextSetFillColorWithColor(_cacheContext, [[UIColor blackColor] CGColor]);
-//            CGContextMoveToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
-//            CGContextAddLineToPoint(_cacheContext, perp2.secondPoint.x, perp2.secondPoint.y);
-//            CGContextAddLineToPoint(_cacheContext, perp2.firstPoint.x, perp2.firstPoint.y);
-//            CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
-//            CGContextClosePath(_cacheContext);
-//            CGContextStrokePath(_cacheContext);
-//            CGContextFillPath(_cacheContext);
-        /*experimental lime stuff*/
-
+ 
 
             int segmentDistance = 2;
             float distance = hypotf(midPoint1.x - midPoint2.x, midPoint1.y - midPoint2.y);
@@ -265,11 +242,12 @@ static const CGFloat lineWidth = 1.0;
 {
     UIColor *color = self.strokeColor;//[UIColor colorWithHue:hue saturation:0.7 brightness:1.0 alpha:1.0];
     CGContextSetStrokeColorWithColor(_cacheContext, [color CGColor]);
+    CGContextSetFillColorWithColor(_cacheContext, [color CGColor]);
     CGContextSetLineCap(_cacheContext, kCGLineCapRound);
     CGContextSetLineWidth(_cacheContext, lineWidth);
 
     NSMutableArray *smoothedPoints = [self calculateSmoothLinePoints];
-    CGContextMoveToPoint(_cacheContext, [[smoothedPoints objectAtIndex:0] CGPointValue].x, [[smoothedPoints objectAtIndex:0] CGPointValue].y);
+//    CGContextMoveToPoint(_cacheContext, [[smoothedPoints objectAtIndex:0] CGPointValue].x, [[smoothedPoints objectAtIndex:0] CGPointValue].y);
 
     for (int i = 1; i < [smoothedPoints count]; i++) {
 
@@ -281,20 +259,34 @@ static const CGFloat lineWidth = 1.0;
         LineSegment coreSegBackWard = (LineSegment){[[smoothedPoints objectAtIndex:i] CGPointValue], [[smoothedPoints objectAtIndex:i] CGPointValue]};
         LineSegment perp1 = [self lineSegmentPerpendicularTo:coreSegForward ofRelativeLength:10.f];
         LineSegment perp2 = [self lineSegmentPerpendicularTo:coreSegBackWard ofRelativeLength:10.f];
-        CGContextAddLineToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
-        CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.firstPoint.y);
-        CGContextAddLineToPoint(_cacheContext, perp2.firstPoint.x, perp2.firstPoint.y);
-        CGContextAddLineToPoint(_cacheContext, perp2.secondPoint.x, perp2.secondPoint.y);
-        CGContextClosePath(_cacheContext);
+        CGContextMoveToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
+        CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
+        CGContextStrokePath(_cacheContext);
+
+//        CGContextMoveToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
+//        CGContextAddLineToPoint(_cacheContext, perp2.firstPoint.x, perp2.firstPoint.y);
+//        CGContextStrokePath(_cacheContext);
+
+//        CGContextAddLineToPoint(_cacheContext, perp2.secondPoint.x, perp2.secondPoint.y);
+//        CGContextAddLineToPoint(_cacheContext, perp2.firstPoint.x, perp2.firstPoint.y);
+//        CGContextStrokePath(_cacheContext);
+//
+//        CGContextMoveToPoint(_cacheContext, perp1.firstPoint.x, perp1.firstPoint.y);
+//        CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.firstPoint.y);
+//        CGContextAddLineToPoint(_cacheContext, perp2.secondPoint.x, perp2.secondPoint.y);
+//        CGContextAddLineToPoint(_cacheContext, perp2.firstPoint.x, perp2.firstPoint.y);
+//        CGContextClosePath(_cacheContext);
+//        CGContextFillPath(_cacheContext);
 
     }
+
+//    CGContextStrokePath(_cacheContext);
 
 
     [self setNeedsDisplayInRect:CGRectMake([[smoothedPoints lastObject] CGPointValue].x - self.frame.size.width/4,
                                            [[smoothedPoints lastObject] CGPointValue].y - self.frame.size.height/4,
                                            self.frame.size.width/2,
                                            self.frame.size.height/2)];
-    CGContextStrokePath(_cacheContext);
 }
 
 - (void) drawRect:(CGRect)rect {

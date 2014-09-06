@@ -245,12 +245,21 @@ static const CGFloat lineWidth = 1.0;
 
     NSMutableArray *smoothedPoints = [self calculateSmoothLinePoints];
 
-
     for (int i = 1; i < [smoothedPoints count]; i++) {
 
         LineSegment perp1 = [self lineSegmentPerpendicularTo:(LineSegment){[[smoothedPoints objectAtIndex:i-1] CGPointValue],
                                                                             [[smoothedPoints objectAtIndex:i] CGPointValue]}
                                                                                 ofRelativeLength:1.f];
+
+        if (i == 1) {
+            CGPoint center = [[smoothedPoints objectAtIndex:0] CGPointValue];
+            float radius = sqrtf(len_sq(perp1.firstPoint, perp1.secondPoint));
+            if (radius < lineWidth) {
+                radius = lineWidth;
+            }
+            CGRect target = CGRectMake(center.x - radius/2, center.y - radius/2, radius, radius);
+            CGContextFillEllipseInRect(_cacheContext, target);
+        }
 
         if ((_lastLineSegment.firstPoint.x == -1 && _lastLineSegment.firstPoint.y == -1) ||
             (_lastLineSegment.firstPoint.x == 0 && _lastLineSegment.firstPoint.y == 0)) {
@@ -269,6 +278,8 @@ static const CGFloat lineWidth = 1.0;
             CGContextAddLineToPoint(_cacheContext, _lastLineSegment.secondPoint.x, _lastLineSegment.secondPoint.y);
             CGContextClosePath(_cacheContext);
             CGContextDrawPath(_cacheContext, kCGPathFillStroke);
+
+
         }
         
         _lastLineSegment = perp1;

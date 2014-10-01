@@ -20,5 +20,6 @@
 @protocol OptionsPaneDelegate <NSObject>
 
 - (void)closeCalledFromSender:(OptionsPaneViewController *)sender;
+- (void)eraserMode:(BOOL)isOn;
 
 @end

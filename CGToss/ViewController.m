@@ -75,23 +75,16 @@
         [sender.view removeFromSuperview];
     }];
 }
+- (void)eraserMode:(BOOL)isOn
+{
+    [_contentView setEraser:isOn];
+}
 
 #pragma mark - ScrollView Delegates
 -(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return _contentView;
 }
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView
-                       withView:(UIView *)view
-                        atScale:(float)scale
-{
-    [CATransaction begin];
-    [CATransaction setValue:[NSNumber numberWithBool:YES]
-                     forKey:kCATransactionDisableActions];
-    _contentView.layer.contentsScale = scale;
-    [CATransaction commit];
-}
-
 
 
 @end

@@ -9,6 +9,7 @@
 @import QuartzCore;
 //#import "NSData+MPBase64.h"
 #import "DrawingView.h"
+#import "UIView+ColorOfPoint.h"
 
 @interface DrawingView()
 
@@ -32,9 +33,11 @@ typedef struct {
     BOOL _orientationChange;
 
     BOOL _clearContext;
+    BOOL _eraserMode;
 }
 
 static const CGFloat lineWidth = 1.0;
+static const CGFloat eraserWidth = 10.0;
 
 - (void)initialize
 {
@@ -54,6 +57,7 @@ static const CGFloat lineWidth = 1.0;
     self.strokeColor = [UIColor blackColor];
     self.multipleTouchEnabled = YES;
     _clearContext = YES;
+    _eraserMode = NO;
     [self initContext:self.frame.size];
 }
 
@@ -101,6 +105,10 @@ static const CGFloat lineWidth = 1.0;
     _clearContext = YES;
     [self initContext:self.frame.size];
     [self setNeedsDisplay];
+}
+- (void)setEraser:(BOOL)isOn
+{
+    _eraserMode = isOn;
 }
 
 - (void) initContext:(CGSize)size {
@@ -254,9 +262,12 @@ static const CGFloat lineWidth = 1.0;
         if (i == 1) {
             CGPoint center = [[smoothedPoints objectAtIndex:0] CGPointValue];
             float radius = sqrtf(len_sq(perp1.firstPoint, perp1.secondPoint));
+
             if (radius < lineWidth) {
                 radius = lineWidth;
             }
+
+
             CGRect target = CGRectMake(center.x - radius/2, center.y - radius/2, radius, radius);
             CGContextFillEllipseInRect(_cacheContext, target);
         }
@@ -277,11 +288,9 @@ static const CGFloat lineWidth = 1.0;
             CGContextAddLineToPoint(_cacheContext, perp1.secondPoint.x, perp1.secondPoint.y);
             CGContextAddLineToPoint(_cacheContext, _lastLineSegment.secondPoint.x, _lastLineSegment.secondPoint.y);
             CGContextClosePath(_cacheContext);
-            CGContextDrawPath(_cacheContext, kCGPathFillStroke);
-
-
+            CGContextDrawPath(_cacheContext, kCGPathFillStroke);    //fills and strokes
         }
-        
+
         _lastLineSegment = perp1;
     }
 
@@ -290,6 +299,26 @@ static const CGFloat lineWidth = 1.0;
                                            [[smoothedPoints lastObject] CGPointValue].y - self.frame.size.height/4,
                                            self.frame.size.width/2,
                                            self.frame.size.height/2)];
+}
+
+- (void) eraseFromBackground
+{
+//    NSLog(@"%@", [self colorOfPoint:[[_points lastObject] CGPointValue]]);
+    UIColor *pointColor = [self colorOfPoint:[[_points lastObject] CGPointValue]];
+    if (![pointColor isEqual:self.backgroundColor]) {
+        NSLog(@"line found");
+    }
+
+    [self drawToCache];
+
+    //tentative strat? very flawed
+    //store a dictionary of all points and the lines they belong to
+        //{CGPoint keyValue : LineStruct owningLine}
+
+    //When line is detected, perform a search within a certain proximity for the nearest logged point ...?
+
+    //when stored point is found, reference the above dictionary to get the data object associated with that line, and remove it
+
 }
 
 - (void) drawRect:(CGRect)rect {
@@ -308,10 +337,10 @@ static const CGFloat lineWidth = 1.0;
     dy = y1 - y0;
 
     CGFloat xa, ya, xb, yb;
-    xa = x1 + (.5f - sinf(dy)/2);
-    ya = y1 - (.5f - sinf(dx)/2);
-    xb = x1 - (.5f - sinf(dy)/2);
-    yb = y1 + (.5f - sinf(dx)/2);
+    xa = x1 + (lineWidth/2.f - sinf(dy)/2);
+    ya = y1 - (lineWidth/2.f - sinf(dx)/2);
+    xb = x1 - (lineWidth/2.f - sinf(dy)/2);
+    yb = y1 + (lineWidth/2.f - sinf(dx)/2);
 
     return (LineSegment){ (CGPoint){xa, ya}, (CGPoint){xb, yb} };
 

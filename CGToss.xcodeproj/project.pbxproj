@@ -24,6 +24,7 @@
 		092EE63319A9D4A70086779E /* DrawingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 092EE63219A9D4A70086779E /* DrawingView.m */; };
 		09C2BA3B19AFD0A9008D43F4 /* OptionsPaneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 09C2BA3919AFD0A9008D43F4 /* OptionsPaneViewController.m */; };
 		09C2BA3C19AFD0A9008D43F4 /* OptionsPaneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 09C2BA3A19AFD0A9008D43F4 /* OptionsPaneViewController.xib */; };
+		09C532A119CAB60100DC5979 /* UIView+ColorOfPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 09C532A019CAB60100DC5979 /* UIView+ColorOfPoint.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,8 @@
 		09C2BA3819AFD0A9008D43F4 /* OptionsPaneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsPaneViewController.h; sourceTree = "<group>"; };
 		09C2BA3919AFD0A9008D43F4 /* OptionsPaneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsPaneViewController.m; sourceTree = "<group>"; };
 		09C2BA3A19AFD0A9008D43F4 /* OptionsPaneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OptionsPaneViewController.xib; sourceTree = "<group>"; };
+		09C5329F19CAB60100DC5979 /* UIView+ColorOfPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ColorOfPoint.h"; sourceTree = "<group>"; };
+		09C532A019CAB60100DC5979 /* UIView+ColorOfPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ColorOfPoint.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +133,7 @@
 				09C2BA3A19AFD0A9008D43F4 /* OptionsPaneViewController.xib */,
 				092EE63119A9D4A70086779E /* DrawingView.h */,
 				092EE63219A9D4A70086779E /* DrawingView.m */,
+				09C532A219CAB63500DC5979 /* Extensions */,
 				092EE61419A9D4980086779E /* Images.xcassets */,
 				092EE60319A9D4980086779E /* Supporting Files */,
 			);
@@ -163,6 +167,15 @@
 				092EE62419A9D4980086779E /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		09C532A219CAB63500DC5979 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				09C5329F19CAB60100DC5979 /* UIView+ColorOfPoint.h */,
+				09C532A019CAB60100DC5979 /* UIView+ColorOfPoint.m */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,6 +276,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09C532A119CAB60100DC5979 /* UIView+ColorOfPoint.m in Sources */,
 				092EE61319A9D4980086779E /* ViewController.m in Sources */,
 				092EE60D19A9D4980086779E /* AppDelegate.m in Sources */,
 				09C2BA3B19AFD0A9008D43F4 /* OptionsPaneViewController.m in Sources */,

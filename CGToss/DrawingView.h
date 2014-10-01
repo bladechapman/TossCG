@@ -11,13 +11,13 @@
 
 @interface DrawingView : UIView
 
-//@property (nonatomic) UIView *viewToMonitor;
-
 @property (nonatomic) UIColor *strokeColor;
 
 - (id)initWithFrame:(CGRect)frame backgroundColor:(UIColor *)backgroundColor;
 - (void)initContext:(CGSize)size;
 - (void)drawToCache;
+
+- (void)setEraser:(BOOL)isOn;
 - (void)clear;
 
 

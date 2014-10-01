@@ -10,8 +10,6 @@
 
 @interface OptionsPaneViewController ()
 
-@property IBOutlet UISlider *sizeSlider;
-
 @end
 
 @implementation OptionsPaneViewController
@@ -36,14 +34,18 @@
 
 - (void)viewDidLoad
 {
-    [self.sizeSlider removeConstraints:self.sizeSlider.constraints];
-    [self.sizeSlider setTranslatesAutoresizingMaskIntoConstraints:YES];
-    self.sizeSlider.transform=CGAffineTransformRotate(self.sizeSlider.transform,270.0/180*M_PI);
+
 
 }
 
 - (IBAction)onCloseButton:(id)sender {
     [self.delegate closeCalledFromSender:self];
+}
+- (IBAction)onEraserButton:(id)sender {
+    [self.delegate eraserMode:YES];
+}
+- (IBAction)onDrawButton:(id)sender {
+    [self.delegate eraserMode:NO];
 }
 
 @end

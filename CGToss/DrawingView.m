@@ -59,6 +59,7 @@ static const CGFloat lineWidth = 1.0;
     [self initContext:self.frame.size];
 
     self.layer.geometryFlipped = YES;
+    NSLog(@"initialized");
 }
 
 - (id)initWithFrame:(CGRect)frame backgroundColor:(UIColor *)backgroundColor
@@ -137,10 +138,6 @@ static const CGFloat lineWidth = 1.0;
     CGContextSetRGBFillColor(_cacheContext, r, g, b, a);
     CGContextSetStrokeColorWithColor(_cacheContext, [self.backgroundColor CGColor]);
     CGContextFillRect(_cacheContext, (CGRect){CGPointZero, size});
-
-//    curLayer = [CALayer layer];
-//    curLayer.frame = self.frame;
-    [self setNeedsDisplay];
 }
 
 
@@ -177,7 +174,7 @@ static const CGFloat lineWidth = 1.0;
 
         [self.layer addSublayer:curLayer];
         [curLayer setNeedsDisplay];
-        [self setNeedsDisplay];
+//        [self setNeedsDisplay];
     }
 
     UITouch *touch = [touches anyObject];
@@ -309,31 +306,31 @@ static const CGFloat lineWidth = 1.0;
         _lastLineSegment = perp1;
     }
 
-
-    [self setNeedsDisplayInRect:CGRectMake([[smoothedPoints lastObject] CGPointValue].x - self.frame.size.width/4,
-                                           [[smoothedPoints lastObject] CGPointValue].y - self.frame.size.height/4,
-                                           self.frame.size.width/2,
-                                           self.frame.size.height/2)];
     [curLayer setNeedsDisplayInRect:CGRectMake([[smoothedPoints lastObject] CGPointValue].x - self.frame.size.width/4,
                                            [[smoothedPoints lastObject] CGPointValue].y - self.frame.size.height/4,
                                            self.frame.size.width/2,
                                            self.frame.size.height/2)];
 }
 
-- (void) drawRect:(CGRect)rect {
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-//    CGImageRef cacheImage = CGBitmapContextCreateImage(_cacheContext);
-//    CGContextDrawImage(context, self.bounds, cacheImage);
-//    CGImageRelease(cacheImage);
-}
+//- (void) drawRect:(CGRect)rect {
+////    CGContextRef context = UIGraphicsGetCurrentContext();
+////    CGImageRef cacheImage = CGBitmapContextCreateImage(_cacheContext);
+////    CGContextDrawImage(context, self.bounds, cacheImage);
+////    CGImageRelease(cacheImage);
+//}
 
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx {
 
-    CGImageRef cacheImage = CGBitmapContextCreateImage(_cacheContext);
-    UIImage *contentImage = [[UIImage alloc] initWithCGImage:cacheImage];
+//    CGImageRef cacheImage = CGBitmapContextCreateImage(_cacheContext);
+//    UIImage *contentImage = [[UIImage alloc] initWithCGImage:cacheImage];
+//
+//    layer.contents = (id)contentImage.CGImage;
+//    CGImageRelease(cacheImage);
 
-    layer.contents = (id)contentImage.CGImage;
-    CGImageRelease(cacheImage);
+//        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGImageRef cacheImage = CGBitmapContextCreateImage(_cacheContext);
+        CGContextDrawImage(ctx, self.bounds, cacheImage);
+        CGImageRelease(cacheImage);
 }
 
 -(LineSegment) lineSegmentPerpendicularTo: (LineSegment)pp ofRelativeLength:(float)fraction

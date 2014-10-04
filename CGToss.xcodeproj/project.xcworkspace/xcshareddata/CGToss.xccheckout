@@ -10,29 +10,29 @@
 	<string>CGToss</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>757F16FD-BB2D-449A-A70C-06FB216BCA9E</key>
+		<key>66A26BC448E9B2AB121AEEC1EDD2BDA3C5482EBD</key>
 		<string>ssh://github.com/bladechapman/TossCG.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>CGToss.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>757F16FD-BB2D-449A-A70C-06FB216BCA9E</key>
+		<key>66A26BC448E9B2AB121AEEC1EDD2BDA3C5482EBD</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>ssh://github.com/bladechapman/TossCG.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>757F16FD-BB2D-449A-A70C-06FB216BCA9E</string>
+	<string>66A26BC448E9B2AB121AEEC1EDD2BDA3C5482EBD</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>757F16FD-BB2D-449A-A70C-06FB216BCA9E</string>
+			<string>66A26BC448E9B2AB121AEEC1EDD2BDA3C5482EBD</string>
 			<key>IDESourceControlWCCName</key>
 			<string>CGToss</string>
 		</dict>

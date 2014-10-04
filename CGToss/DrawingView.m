@@ -102,9 +102,9 @@ static const CGFloat lineWidth = 1.0;
 
 - (void)clear
 {
-    _clearContext = YES;
-    [self initContext:self.frame.size];
-    [self setNeedsDisplay];
+//    _clearContext = YES;
+//    [self initContext:self.frame.size];
+//    [self setNeedsDisplay];
 }
 
 - (void) initContext:(CGSize)size {
@@ -175,8 +175,8 @@ static const CGFloat lineWidth = 1.0;
         curLayer.frame = self.frame;
         curLayer.delegate = self;
 
-//        [curLayer setNeedsDisplay];
         [self.layer addSublayer:curLayer];
+        [curLayer setNeedsDisplay];
         [self setNeedsDisplay];
     }
 
@@ -310,14 +310,14 @@ static const CGFloat lineWidth = 1.0;
     }
 
 
+    [self setNeedsDisplayInRect:CGRectMake([[smoothedPoints lastObject] CGPointValue].x - self.frame.size.width/4,
+                                           [[smoothedPoints lastObject] CGPointValue].y - self.frame.size.height/4,
+                                           self.frame.size.width/2,
+                                           self.frame.size.height/2)];
     [curLayer setNeedsDisplayInRect:CGRectMake([[smoothedPoints lastObject] CGPointValue].x - self.frame.size.width/4,
                                            [[smoothedPoints lastObject] CGPointValue].y - self.frame.size.height/4,
                                            self.frame.size.width/2,
                                            self.frame.size.height/2)];
-//    [self setNeedsDisplayInRect:CGRectMake([[smoothedPoints lastObject] CGPointValue].x - self.frame.size.width/4,
-//                                               [[smoothedPoints lastObject] CGPointValue].y - self.frame.size.height/4,
-//                                               self.frame.size.width/2,
-//                                               self.frame.size.height/2)];
 }
 
 - (void) drawRect:(CGRect)rect {

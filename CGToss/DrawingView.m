@@ -106,6 +106,7 @@ static const CGFloat lineWidth = 1.0;
 //    _clearContext = YES;
 //    [self initContext:self.frame.size];
 //    [self setNeedsDisplay];
+    [curLayer removeFromSuperlayer];
 }
 
 - (void) initContext:(CGSize)size {
@@ -202,7 +203,7 @@ static const CGFloat lineWidth = 1.0;
     }
 
     if (curLayer.superlayer) {
-        [curLayer removeFromSuperlayer];
+//        [curLayer removeFromSuperlayer];
     }
 
     UITouch *touch = [touches anyObject];
